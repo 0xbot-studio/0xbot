@@ -15,7 +15,7 @@ Each application is an independent repository, build and deployment unit. Cross-
 
 ## Current status
 
-The implemented slice is wallet sign-in → personal workspace → API key → native ETH / BNB / POL and curated USDT / USDC balances across Ethereum, BSC and Polygon PoS → request history and usage. Free public routes use PublicNode, dRPC and BNB Chain endpoints, with network-scoped fallback. PADIN public rooms, inbox, reference prices, NFT reads and read-only LI.FI swap quotes are being delivered incrementally; see each repository's README for the exact scope and safety boundaries. X sign-in requires an X OAuth application. Paid routes are not enabled. See ADR 0004 for token provenance, precision and batch limits.
+The implemented slice is wallet sign-in → personal workspace → API key → native ETH / BNB / POL and curated USDT / USDC balances across Ethereum, BSC and Polygon PoS → request history and usage. Free public routes use PublicNode, dRPC and BNB Chain endpoints, with network-scoped fallback. API 0.11.0 adds curated tokenized-equity reads (xStocks balances and underlying-stock reference prices; see ADR 0015). PADIN public rooms, inbox, reference prices, NFT reads and read-only LI.FI swap quotes are being delivered incrementally; see each repository's README for the exact scope and safety boundaries. X sign-in requires an X OAuth application. Paid routes are not enabled. See ADR 0004 for token provenance, precision and batch limits.
 
 ## Documentation
 
