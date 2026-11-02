@@ -1,6 +1,6 @@
 # ADR 0015: Curated tokenized-equity read capabilities
 
-Status: implemented for API 0.11.0; not yet deployed. Decision date: 2026-11-02.
+Status: implemented for API 0.11.0; not yet deployed. Decision date: 2026-11-02; curated contracts verified on-chain via PublicNode on 2026-11-03.
 
 ## Context
 
@@ -10,7 +10,7 @@ The stablecoin registry, `get_token_balance` and the common three-asset snapshot
 
 ## Decision
 
-- Extend the curated token registry with `asset_class` (`stablecoin` | `tokenized_equity`) plus `underlying` and `issuer` metadata. Equity entries are Backed xStocks ERC-20s on Ethereum: AAPLx, TSLAX, AMATx (18 decimals). Addresses were cross-checked between Etherscan and Ethplorer and limited to entries with an unambiguous provenance; INTCx was excluded because two distinct upstream equity feeds exist with no authoritative tiebreaker. Final `symbol()/name()/decimals()` verification on a public RPC is a release gate.
+- Extend the curated token registry with `asset_class` (`stablecoin` | `tokenized_equity`) plus `underlying` and `issuer` metadata. Equity entries are Backed xStocks ERC-20s on Ethereum: AAPLx, TSLAX, AMATx (18 decimals). Addresses were cross-checked between Etherscan and Ethplorer and limited to entries with an unambiguous provenance; INTCx was excluded because two distinct upstream equity feeds exist with no authoritative tiebreaker. `symbol()/name()/decimals()` and deployed code were verified read-only on PublicNode (2026-11-03); on-chain `name()` values are mirrored in the registry.
 - Add two versioned capabilities behind REST and MCP sharing the existing envelope, routing, circuit state and metering: `data.rwa.token_balance` (same-block decimals-verified `balanceOf`) and `market.equity_price` (reference price of the underlying stock, exact contract identity only, no ticker guessing).
 - Keep the existing contracts intact: `get_common_balances` filters to `asset_class=stablecoin` and remains a fixed three assets; `get_token_balance` still rejects equity contracts; `market.token_price` remains DefiLlama-only.
 - Equity prices are served by a new credential-free `pyth-prices` provider (Pyth Hermes pull API) declaring only `market.equity_price`, with a provider-internal curated contract→feed mapping as eligibility. Exact decimal strings are scaled from Pyth integer price/exponent with bounds; `confidence` reports price/(price+conf) as a 0..1 score; observations older than 10 minutes are `price_stale` (market-closed prices are never returned as last-known values); upstream 401/429/5xx map to explicit errors — the provider fails closed and can be disabled by dashboard route settings.
